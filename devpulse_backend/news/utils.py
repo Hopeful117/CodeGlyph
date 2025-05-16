@@ -1,0 +1,110 @@
+import requests
+from datetime import datetime
+from .models import Article
+import praw
+import feedparser
+from django.conf import settings
+
+defaultList=['python','javascript','java']
+
+def fetch_devto_articles(tags=None):
+    if tags is None:
+        tags=defaultList
+    
+    for tag in tags:
+        url = f"https://dev.to/api/articles?tag={tag}"
+        response = requests.get(url)
+        if response.status_code != 200:
+            print("Erreur API dev.to:", response.status_code)
+            return []
+
+        articles_data = response.json()
+        articles = []
+        for item in articles_data:
+            article, created = Article.objects.get_or_create(
+                url=item['url'],
+                defaults={
+                    'title': item['title'],
+                    'source': 'dev.to',
+                    'language': tag,
+                    'summary': item.get('description') or '',
+                    'published_at': datetime.strptime(item['published_at'], '%Y-%m-%dT%H:%M:%SZ'),
+                }
+            )
+            if created:
+                articles.append(article)
+
+    return articles
+
+
+
+
+def fetch_reddit_posts(subreddit_name=None, limit=10):
+    reddit = praw.Reddit(
+    client_id=settings.REDDIT_CLIENT_ID,
+    client_secret=settings.REDDIT_CLIENT_SECRET,
+    user_agent=settings.REDDIT_USER_AGENT
+
+    )
+    
+    if subreddit_name is None:
+        subreddit_name=defaultList
+    for name in subreddit_name:
+        subreddit = reddit.subreddit(name)
+        for post in subreddit.new(limit=limit):
+       
+            if not Article.objects.filter(url=post.url).exists():
+                Article.objects.create(
+                    title=post.title,
+                    url=post.url,
+                    source='Reddit',
+                    language=name,
+                    published_at=datetime.utcfromtimestamp(post.created_utc),
+                   
+            )
+                
+
+
+
+def fetch_hackernews_articles(keywords=None, limit=10):
+    if keywords is None:
+        keywords=defaultList
+    top_stories_url = 'https://hacker-news.firebaseio.com/v0/topstories.json'
+    story_ids = requests.get(top_stories_url).json()[:limit]
+
+    for story_id in story_ids:
+        story_url = f'https://hacker-news.firebaseio.com/v0/item/{story_id}.json'
+        story = requests.get(story_url).json()
+
+        for keyword in keywords:
+          
+                if not Article.objects.filter(url=story['url']).exists():
+                    Article.objects.create(
+                        title=story['title'],
+                        url=story['url'],
+                        source='HackerNews',
+                        language=keyword,
+                        published_at=datetime.utcfromtimestamp(story['time']),
+                        
+                    )
+                    print("hello world !")
+
+        
+def fetch_medium_articles(tags=None, limit=10):
+    if tags is None:
+        tags = defaultList
+
+    for tag in tags:
+        url = f'https://medium.com/feed/tag/{tag}'
+        feed = feedparser.parse(url)
+        
+        for entry in feed.entries[:limit]:
+            if not Article.objects.filter(url=entry.link).exists():
+                Article.objects.create(
+                    title=entry.title,
+                    url=entry.link,
+                    source='Medium',
+                    language=tag,
+                    published_at=datetime(*entry.published_parsed[:6]) if hasattr(entry, 'published_parsed') else datetime.utcnow(),
+                   
+                )
