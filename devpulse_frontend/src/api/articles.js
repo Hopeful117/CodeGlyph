@@ -18,3 +18,6 @@ export const fetchSources = ()=>
 
 export const fetchTag = ()=>
   API.get('/tags')
+
+export const fetchRepos = ()=>
+  API.get('/repos')

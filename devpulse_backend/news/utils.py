@@ -1,6 +1,7 @@
 import requests
 from datetime import datetime
 from .models import Article
+from.models import Repo
 import praw
 import feedparser
 from django.conf import settings
@@ -9,7 +10,8 @@ from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer
 import nltk
-
+import requests
+from bs4 import BeautifulSoup
 
 
 defaultList=[
@@ -194,10 +196,42 @@ def fetch_medium_articles(tags=None, limit=10):
                 )
 
 
+def fetch_github_repo():
+    url = "https://github.com/trending"
+    headers = {"User-Agent": "Mozilla/5.0"}
+
+    try:
+        res = requests.get(url, headers=headers)
+        soup = BeautifulSoup(res.text, 'html.parser')
+       
+
+        for repo in soup.select("article.Box-row")[:10]:
+            title_tag = repo.h2.a
+            full_name = title_tag.get_text(strip=True).replace('\n', '').replace(' ', '')
+            href = "https://github.com" + title_tag['href']
+            description_tag = repo.p
+            description = description_tag.get_text(strip=True) if description_tag else "Pas de description."
+
+
+            if not Repo.objects.filter(url=href).exists():
+
+                Repo.objects.create(
+                    title=full_name,
+                    url=href,
+                    summary=description
+                )
+
+    except Exception as e:
+      print(f"Erreur pour {url}: {e}")
+
+
+
 
 
 def purge():
     Article.objects.all().delete()
+    Repo.objects.all().delete()
+    
 
 
 
@@ -208,4 +242,5 @@ def getAll():
     fetch_reddit_posts()
     fetch_hackernews_articles()
     fetch_medium_articles()
+    fetch_github_repo()
     

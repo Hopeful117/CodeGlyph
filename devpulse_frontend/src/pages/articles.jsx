@@ -4,16 +4,14 @@ import { fetchArticlesBySource } from '../api/articles';
 import { fetchSources } from '../api/articles';
 import { fetchArticlesByTag } from '../api/articles';
 import { fetchTag } from '../api/articles';
+import { fetchRepos } from '../api/articles';
 import Article from '../components/article';
-
+import Repo from '../components/repos';
 
 
  
-  
 
   
-
-
 
 const ArticleList = () => {
   const [articles, setArticles] = useState([]);
@@ -23,6 +21,8 @@ const ArticleList = () => {
   const [tags,setTags]=useState([]);
   const [selectedSource,setSelectedSource]= useState(null);
   const [selectedTag,setSelectedTag]=useState(null);
+  const [repos,SetRepos]=useState([])
+  
 
   const loadArticles = async (page = 1) => {
     try {
@@ -49,6 +49,9 @@ const ArticleList = () => {
   };
 
 
+ 
+
+
 
   const loadSources=async()=>{
     const res = await fetchSources();
@@ -58,6 +61,12 @@ const ArticleList = () => {
     const res = await fetchTag();
     setTags(res.data.tags)
   }
+  const loadRepo=async()=>{
+ 
+    const res=await fetchRepos()
+    SetRepos(res.data.results)
+  }
+
 
 
 
@@ -66,6 +75,8 @@ const ArticleList = () => {
     loadArticles();
     loadSources()
     loadTags()
+    loadRepo()
+    
   }, []);
 
 
@@ -81,6 +92,7 @@ const ArticleList = () => {
 
   return (
     <main>
+      <div className="articles">
       <h1 className="ibm-plex-sans-title">Articles</h1>
      
       <h3 className="ibm-plex-sans-title">Sources</h3>
@@ -113,6 +125,17 @@ const ArticleList = () => {
         {prevPage && <button className="filter-button" onClick={() => loadArticles(new URL(prevPage).searchParams.get('page'))}>Previous</button>}
         {nextPage && <button className="filter-button" onClick={() => loadArticles(new URL(nextPage).searchParams.get('page'))}>Next</button>}
       </div>
+    </div>
+    <div className="repo">
+      <h1 className="ibm-plex-sans-title">GitHub top Repos</h1>
+      {repos.map((repo)=>(
+        <div key={repo.id} className="gallery">
+        <Repo url={repo.url} title={repo.title} description={repo.summary}/>
+        </div>
+    
+      ))}
+    </div>
+        
     </main>
   );
 };

@@ -4,7 +4,8 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Article
-from .serializers import ArticleSerializer
+from .models import Repo
+from .serializers import ArticleSerializer,RepoSerializer
 from rest_framework.decorators import action
 from .utils import defaultList
 
@@ -48,3 +49,12 @@ class SourceListView(APIView):
     def get(self,request):
         sources = Article.objects.values_list('source', flat=True).distinct()
         return Response({"sources":sources})
+    
+
+
+class RepoViewSet(viewsets.ReadOnlyModelViewSet):
+    
+    queryset=Repo.objects.all()
+    serializer_class = RepoSerializer
+    
+    
