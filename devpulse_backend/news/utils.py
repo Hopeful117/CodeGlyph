@@ -4,8 +4,52 @@ from .models import Article
 import praw
 import feedparser
 from django.conf import settings
+from newspaper import Article as NewsArticle
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.summarizers.lsa import LsaSummarizer
+import nltk
 
-defaultList=['python','javascript','java']
+
+
+defaultList=[
+  "javascript",
+  "python",
+  "java",
+  "typescript",
+  "react",
+  "vue",
+  "angular",
+  "nodejs",
+  "express",
+  "django",
+  "flask",
+  "docker",
+  "kubernetes",
+  "aws",
+  "azure",
+  "gcp",
+  "graphql",
+  "rest",
+  "css",
+  "html",
+  "webpack",
+  "babel",
+  "flutter",
+  "swift",
+  "android",
+  "ios",
+  "mongodb",
+  "postgresql",
+  "sql",
+  "devops",
+  "machinelearning",
+  "ai",
+  "blockchain",
+  "security",
+  "testing",
+  "cicd"
+]
 
 def fetch_devto_articles(tags=None):
     if tags is None:
@@ -25,7 +69,7 @@ def fetch_devto_articles(tags=None):
                 url=item['url'],
                 defaults={
                     'title': item['title'],
-                    'source': 'dev.to',
+                    'source': 'dev-to',
                     'language': tag,
                     'summary': item.get('description') or '',
                     'published_at': datetime.strptime(item['published_at'], '%Y-%m-%dT%H:%M:%SZ'),
@@ -54,12 +98,16 @@ def fetch_reddit_posts(subreddit_name=None, limit=10):
         for post in subreddit.new(limit=limit):
        
             if not Article.objects.filter(url=post.url).exists():
+                text_to_summarize = post.selftext or post.title
+                summary = text_to_summarize[:300] + '...' if text_to_summarize else 'No summary available'
+
                 Article.objects.create(
                     title=post.title,
                     url=post.url,
                     source='Reddit',
                     language=name,
                     published_at=datetime.utcfromtimestamp(post.created_utc),
+                    summary=summary,
                    
             )
                 
@@ -77,6 +125,22 @@ def fetch_hackernews_articles(keywords=None, limit=10):
         story = requests.get(story_url).json()
 
         for keyword in keywords:
+                url = story['url']
+                try:
+                    article=NewsArticle(url)
+                    article.download()
+                    article.parse()
+                    full_text = article.text
+
+                    parser = PlaintextParser.from_string(full_text, Tokenizer("english"))
+                    summarizer = LsaSummarizer()
+                    summary_sentences = summarizer(parser.document, 3)  
+                    summary = " ".join(str(sentence) for sentence in summary_sentences)
+
+                except Exception as e:
+                    print(f"Erreur pour {url}: {e}")
+
+
           
                 if not Article.objects.filter(url=story['url']).exists():
                     Article.objects.create(
@@ -85,10 +149,10 @@ def fetch_hackernews_articles(keywords=None, limit=10):
                         source='HackerNews',
                         language=keyword,
                         published_at=datetime.utcfromtimestamp(story['time']),
+                        summary=summary
                         
                     )
-                    print("hello world !")
-
+                  
         
 def fetch_medium_articles(tags=None, limit=10):
     if tags is None:
@@ -99,6 +163,25 @@ def fetch_medium_articles(tags=None, limit=10):
         feed = feedparser.parse(url)
         
         for entry in feed.entries[:limit]:
+            url=entry.link
+            try:
+                article = NewsArticle(url)
+                article.download()
+                article.parse()
+                text = article.text
+
+                parser = PlaintextParser.from_string(text, Tokenizer("english"))
+                summarizer = LsaSummarizer()
+                summary_sentences = summarizer(parser.document, 3)
+                summary = " ".join(str(sentence) for sentence in summary_sentences)
+            
+
+            except Exception as e:
+                print(f"Erreur pour {url}: {e}")
+
+
+           
+
             if not Article.objects.filter(url=entry.link).exists():
                 Article.objects.create(
                     title=entry.title,
@@ -106,5 +189,23 @@ def fetch_medium_articles(tags=None, limit=10):
                     source='Medium',
                     language=tag,
                     published_at=datetime(*entry.published_parsed[:6]) if hasattr(entry, 'published_parsed') else datetime.utcnow(),
+                    summary=summary
                    
                 )
+
+
+
+
+def purge():
+    Article.objects.all().delete()
+
+
+
+
+def getAll():
+    
+    fetch_devto_articles()
+    fetch_reddit_posts()
+    fetch_hackernews_articles()
+    fetch_medium_articles()
+    

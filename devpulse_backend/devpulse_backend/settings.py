@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from dotenv import load_dotenv
+from celery.schedules import crontab
+
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -41,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'news',
-    'corsheaders'
+    'corsheaders',
+    'django_celery_beat'
 ]
 
 MIDDLEWARE = [
@@ -149,3 +152,20 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
 ]
 
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Paris'  
+
+
+CELERY_BEAT_SCHEDULE = {
+    'update-articles-every-hour': {
+        'task': 'news.tasks.update_articles_task',
+        'schedule': 3600.0,  # toutes les heures
+    },
+    'purge-articles-every-week':{
+        'task':'news.tasks.purge_articles_task',
+          'schedule': crontab(hour=2, minute=0, day_of_week='sunday'),
+    }
+}
