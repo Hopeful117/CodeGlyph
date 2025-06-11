@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 from celery.schedules import crontab
+from datetime import timedelta
 
 import os
 
@@ -168,4 +169,10 @@ CELERY_BEAT_SCHEDULE = {
         'task':'news.tasks.purge_articles_task',
           'schedule': crontab(hour=2, minute=0, day_of_week='sunday'),
     }
+}
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }

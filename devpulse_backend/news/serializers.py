@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Article,Repo
+from .models import Article,Repo,SavedArticle
+
 
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,3 +13,16 @@ class RepoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Repo
         fields='__all__'
+
+
+
+
+
+
+class SavedArticleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SavedArticle
+        fields = ['id', 'article', 'saved_at']
+        read_only_fields = ['saved_at']
+
+

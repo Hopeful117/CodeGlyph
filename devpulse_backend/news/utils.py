@@ -1,5 +1,5 @@
 import requests
-from datetime import datetime
+from datetime import datetime,timezone
 from .models import Article
 from.models import Repo
 import praw
@@ -12,6 +12,8 @@ from sumy.summarizers.lsa import LsaSummarizer
 import nltk
 import requests
 from bs4 import BeautifulSoup
+from prawcore.exceptions import Forbidden,NotFound
+from django.utils.timezone import make_aware
 
 
 defaultList=[
@@ -96,23 +98,39 @@ def fetch_reddit_posts(subreddit_name=None, limit=10):
     if subreddit_name is None:
         subreddit_name=defaultList
     for name in subreddit_name:
-        subreddit = reddit.subreddit(name)
-        for post in subreddit.new(limit=limit):
+        try:
+            subreddit=reddit.subreddit(name)
+            subreddit.id
+            posts = subreddit.new(limit=limit)
+        except (Forbidden,NotFound):
+            print(f"Accès interdit au subreddit '{name}', saut du subreddit.")
+            continue  # passe au suivant sans planter la fonction
+        except Exception as e:
+            print(f"Erreur inattendue avec le subreddit '{name}': {e}")
+            continue
+        
+        for post in posts:
+            try:
        
-            if not Article.objects.filter(url=post.url).exists():
-                text_to_summarize = post.selftext or post.title
-                summary = text_to_summarize[:300] + '...' if text_to_summarize else 'No summary available'
+                if not Article.objects.filter(url=post.url).exists():
+                    text_to_summarize = post.selftext or post.title
+                    summary = text_to_summarize[:300] + '...' if text_to_summarize else 'No summary available'
 
-                Article.objects.create(
-                    title=post.title,
-                    url=post.url,
-                    source='Reddit',
-                    language=name,
-                    published_at=datetime.utcfromtimestamp(post.created_utc),
-                    summary=summary,
-                   
-            )
-                
+                    Article.objects.create(
+                        title=post.title,
+                        url=post.url,
+                        source='Reddit',
+                        language=name,
+                        published_at = make_aware(datetime.fromtimestamp(post.created_utc), timezone.utc),
+                        summary=summary,
+                    
+                )
+            
+            except Exception as e:
+                    print(f"Erreur pour {post.url}: {e}")
+                    continue
+
+                    
 
 
 
@@ -150,7 +168,7 @@ def fetch_hackernews_articles(keywords=None, limit=10):
                         url=story['url'],
                         source='HackerNews',
                         language=keyword,
-                        published_at=datetime.utcfromtimestamp(story['time']),
+                        published_at=make_aware(datetime.fromtimestamp(story['time'])),
                         summary=summary
                         
                     )
@@ -190,7 +208,7 @@ def fetch_medium_articles(tags=None, limit=10):
                     url=entry.link,
                     source='Medium',
                     language=tag,
-                    published_at=datetime(*entry.published_parsed[:6]) if hasattr(entry, 'published_parsed') else datetime.utcnow(),
+                    published_at=datetime(*entry.published_parsed[:6]) if hasattr(entry, 'published_parsed') else datetime.now(),
                     summary=summary
                    
                 )
@@ -231,13 +249,14 @@ def fetch_github_repo():
 def purge():
     Article.objects.all().delete()
     Repo.objects.all().delete()
+    getAll()
     
 
 
 
 
 def getAll():
-    
+    fetch_github_repo()
     fetch_devto_articles()
     fetch_reddit_posts()
     fetch_hackernews_articles()

@@ -1,8 +1,11 @@
 import axios from 'axios';
 
+
 const API = axios.create({
   baseURL: 'http://127.0.0.1:8000/api', 
 });
+
+
 
 export const fetchArticles = (page = 1) =>
   API.get(`/articles/?page=${page}`);
@@ -21,3 +24,67 @@ export const fetchTag = ()=>
 
 export const fetchRepos = ()=>
   API.get('/repos')
+
+
+
+export const fetchBookmark = ()=>
+  API.get('/bookmark/', {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('access')}`
+    }})
+
+
+export const saveArticle = async(url,title,source,language,date,description)=>{
+ try {
+        await API.post(`/savearticle/`, {
+     "url":url,
+     "title":title,
+     "source":source,
+     "language":language,
+     "date":date,
+     "description":description
+    }, {
+      headers: { 'Content-Type': 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('access')}`,
+      },
+    
+    });
+  }
+  catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data?.error || 'Erreur lors de l\'enregistrement');
+    } else {
+      throw new Error('Erreur réseau ou serveur injoignable');
+    }
+  }
+
+
+  }
+
+
+  API.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    const refreshToken = localStorage.getItem('refresh');
+
+    if (error.response?.status === 401 && refreshToken && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        const { data } = await axios.post('http://localhost:8000/api/token/refresh/', {
+          refresh: refreshToken,
+        });
+        localStorage.setItem('access', data.access);
+        originalRequest.headers.Authorization = `Bearer ${data.access}`;
+        return API(originalRequest);
+      } catch (refreshError) {
+        localStorage.removeItem('access');
+        localStorage.removeItem('refresh');
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);

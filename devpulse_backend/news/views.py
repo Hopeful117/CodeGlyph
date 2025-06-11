@@ -1,13 +1,16 @@
 
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets,permissions,status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Article
-from .models import Repo
-from .serializers import ArticleSerializer,RepoSerializer
+from .models import Repo,SavedArticle
+from .serializers import ArticleSerializer,RepoSerializer,SavedArticleSerializer
 from rest_framework.decorators import action
 from .utils import defaultList
+from django.contrib.auth.models import User
+import datetime
+from django.db import IntegrityError
 
 class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Article.objects.all().order_by('-published_at')
@@ -56,5 +59,54 @@ class RepoViewSet(viewsets.ReadOnlyModelViewSet):
     
     queryset=Repo.objects.all()
     serializer_class = RepoSerializer
+
+
+class SavedArticleViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = SavedArticleSerializer
+
+    def get_queryset(self):
+        return SavedArticle.objects.filter(user=self.request.user)
+
+  
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    
+
+class SaveArticle(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def post(self, request):
+        user = User.objects.filter(username=request.user).first()
+        data = request.data
+        
+        url = data.get('url')
+       
+
+        if not Article.objects.filter(url=url).exists():
+            return Response({"error": "L'article n'existe pas"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        else:
+            article=Article.objects.filter(url=url).first()
+
+       
+        try:
+            SavedArticle.objects.create(user=user, article=article)
+        except IntegrityError:
+            return Response({"error": "Article déjà sauvegardé."}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"success": "Article sauvegardé avec succès."}, status=status.HTTP_201_CREATED)
+
+
+
+class RegisterView(APIView):
+    def post(self, request):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        if User.objects.filter(username=username).exists():
+            return Response({"error": "Username taken"}, status=status.HTTP_400_BAD_REQUEST)
+        User.objects.create_user(username=username, password=password)
+        return Response({"message": "Account created"}, status=status.HTTP_201_CREATED)
     
     
