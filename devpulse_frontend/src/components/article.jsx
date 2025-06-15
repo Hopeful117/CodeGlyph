@@ -1,9 +1,10 @@
 import { useAuth } from "../context/authcontext"
+
 import SaveButton from "./SaveButton"
 
 export default function Article ({url,title,source,language,date,description}){
   const {isLoggedIn}=useAuth()
-
+  
 
     return(
     <div className="article">
@@ -18,7 +19,7 @@ export default function Article ({url,title,source,language,date,description}){
           <p className="text-sm text-gray-600">{source} • {language}</p>
           <p>{date}</p>
           {isLoggedIn &&
-          <SaveButton url={url} title={title} source={source} language={language} date={date} description={description} />
+          <SaveButton url={url}/>
 }
 
 

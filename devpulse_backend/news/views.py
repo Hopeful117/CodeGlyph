@@ -61,7 +61,7 @@ class RepoViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = RepoSerializer
 
 
-class SavedArticleViewSet(viewsets.ModelViewSet):
+class SavedArticleViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = SavedArticleSerializer
 
@@ -92,11 +92,27 @@ class SaveArticle(APIView):
 
        
         try:
-            SavedArticle.objects.create(user=user, article=article)
+            saved_article=SavedArticle.objects.create(user=user, article=article)
         except IntegrityError:
             return Response({"error": "Article déjà sauvegardé."}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({"success": "Article sauvegardé avec succès."}, status=status.HTTP_201_CREATED)
+        serializer = SavedArticleSerializer(saved_article)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def delete(self,request):
+        user = User.objects.filter(username=request.user).first()
+        url = request.data.get('url')
+
+        try:
+            article = Article.objects.get(url=url)
+            saved = SavedArticle.objects.get(user=user, article=article)
+            saved.delete()
+            return Response({"message": "Article supprimé."}, status=status.HTTP_204_NO_CONTENT)
+        except Article.DoesNotExist:
+            return Response({"error": "Article non trouvé."}, status=status.HTTP_404_NOT_FOUND)
+        except SavedArticle.DoesNotExist:
+            return Response({"error": "Article non sauvegardé."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 

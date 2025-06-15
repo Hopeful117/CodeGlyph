@@ -1,20 +1,18 @@
 
-import { saveArticle } from "../api/articles";
 
+import { useSavedArticle } from "../context/bookmarkContext";
 
-export default function SaveButton({url,title,source,language,date,description}){
+export default function SaveButton({url}){
+const {savedUrls,toogleSave}=useSavedArticle()
+const isSaved = savedUrls.includes(url);
+
   
-    const save = async(e)=>{
-     e.preventDefault();
-     saveArticle(url,title,source,language,date,description)
- 
-   
+    
    
 
 
-    }
     return(
-        <button className='filter-button' onClick={save}>save</button>
+        <button className='filter-button' onClick={()=>toogleSave(url)}>{isSaved ?'forget':'save'}</button>
     )
 
 }

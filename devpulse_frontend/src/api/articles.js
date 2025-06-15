@@ -34,15 +34,11 @@ export const fetchBookmark = ()=>
     }})
 
 
-export const saveArticle = async(url,title,source,language,date,description)=>{
+export const saveArticle = async(url)=>{
  try {
         await API.post(`/savearticle/`, {
      "url":url,
-     "title":title,
-     "source":source,
-     "language":language,
-     "date":date,
-     "description":description
+    
     }, {
       headers: { 'Content-Type': 'application/json',
     Authorization: `Bearer ${localStorage.getItem('access')}`,
@@ -60,6 +56,26 @@ export const saveArticle = async(url,title,source,language,date,description)=>{
 
 
   }
+
+export const deleteArticle=async(url)=>{
+  try {
+    await API.delete('/savearticle/',{
+      "url":url,},
+      {
+    headers: { 'Content-Type': 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('access')}`,
+
+      }
+    })
+  }
+   catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data?.error || 'Erreur lors de la suppresion');
+    } else {
+      throw new Error('Erreur réseau ou serveur injoignable');
+    }
+  }
+}
 
 
   API.interceptors.response.use(

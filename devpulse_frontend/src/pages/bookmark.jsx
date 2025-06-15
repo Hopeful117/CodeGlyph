@@ -20,8 +20,8 @@ export default function Bookmark(){
     return(
         <main>
          {articles.map((article) => (
-                <div key={article.id} className="gallery">
-                <Article url={article.url} title={article.title}source={article.source}language={article.language} date={article.published_at} description={article.summary}/> 
+                <div key={article.article} className="gallery">
+                <Article url={article.article_details.url} title={article.article_details.title}source={article.article_details.source}language={article.article_details.language} date={article.article_details.published_at} summary={article.article_details.summary}/> 
                 
                 
                 </div>
