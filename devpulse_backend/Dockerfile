@@ -9,6 +9,8 @@ COPY requirements.txt .
 
 # Installer les dépendances
 RUN pip install --no-cache-dir -r requirements.txt
+RUN python -c "import nltk; nltk.download('punkt_tab')"
+
 
 # Copier tout le projet
 COPY . .

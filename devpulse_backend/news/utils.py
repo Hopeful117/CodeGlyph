@@ -9,11 +9,12 @@ from newspaper import Article as NewsArticle
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer
-import nltk
+
 import requests
 from bs4 import BeautifulSoup
 from prawcore.exceptions import Forbidden,NotFound
 from django.utils.timezone import make_aware
+
 
 
 defaultList=[
@@ -175,6 +176,9 @@ def fetch_hackernews_articles(keywords=None, limit=10):
                   
         
 def fetch_medium_articles(tags=None, limit=10):
+    import nltk
+    nltk.download('punkt_tab')
+   
     if tags is None:
         tags = defaultList
 

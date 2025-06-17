@@ -8,7 +8,7 @@ def update_articles_task():
     getAll()
     return "Articles mis à jour"
 
-
+@shared_task
 def purge_articles_task():
     from news.utils import purge,getAll
     purge()

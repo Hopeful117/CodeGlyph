@@ -6,7 +6,7 @@ from django.contrib.auth.models import AbstractUser
 
 class Article(models.Model):
     title = models.CharField(max_length=500)
-    url = models.URLField(max_length=500)
+    url = models.URLField(max_length=1000)
     source = models.CharField(max_length=100)
     language = models.CharField(max_length=50)
     published_at = models.DateTimeField()
@@ -18,7 +18,7 @@ class Article(models.Model):
 
 class Repo(models.Model):
     title = models.CharField(max_length=500)
-    url = models.URLField(max_length=500)
+    url = models.URLField(max_length=1000)
     summary = models.TextField(blank=True)
 
 
