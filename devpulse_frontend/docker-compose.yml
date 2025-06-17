@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./
+    ports:
+      - "3000:3000"   # Expose le front sur le port 3000 local
+    restart: unless-stopped

@@ -39,7 +39,7 @@ const ArticleList = () => {
       res = await fetchArticles(page);
     }
 
-    setArticles(res.data.results);
+    setArticles(res.data);
     setNextPage(res.data.next);
     setPrevPage(res.data.previous);
     }
@@ -64,7 +64,7 @@ const ArticleList = () => {
   const loadRepo=async()=>{
  
     const res=await fetchRepos()
-    SetRepos(res.data.results)
+    SetRepos(res.data)
   }
 
 
@@ -113,7 +113,7 @@ const ArticleList = () => {
       ))}
       </div>
 
-      {articles.map((article) => (
+      {articles && articles.map((article) => (
         <div key={article.id} className="gallery">
         <Article url={article.url} title={article.title}source={article.source}language={article.language} date={article.published_at} description={article.summary}/> 
         
@@ -128,7 +128,7 @@ const ArticleList = () => {
     </div>
     <div className="repo">
       <h1 className="ibm-plex-sans-title">GitHub top Repos</h1>
-      {repos.map((repo)=>(
+      {repos && repos.map((repo)=>(
         <div key={repo.id} className="gallery">
         <Repo url={repo.url} title={repo.title} description={repo.summary}/>
         </div>

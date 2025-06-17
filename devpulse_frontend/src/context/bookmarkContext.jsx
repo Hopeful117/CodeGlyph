@@ -3,15 +3,19 @@ import { fetchBookmark } from "../api/articles";
 import { deleteArticle } from "../api/articles";
 import { saveArticle } from "../api/articles";
 import{useState,useEffect,useContext}from "react"
+import { useAuth } from "./authcontext";
 
 const SavedContext = createContext();
 
 export const SavedProvider = ({children})=>{
     const [savedUrls,setSavedUrls]=useState([]);
-
+    const {isLoggedIn} = useAuth
+    
     const loadSaved= async ()=>{
+        if (isLoggedIn){
         const res =  await fetchBookmark();
         setSavedUrls(res.data.results.map(a=>a.article_details.url));
+        }
     };
 
     const toggleSave = async (url)=>{
@@ -27,8 +31,9 @@ export const SavedProvider = ({children})=>{
 
 
         }
+    }
     
-    };
+    
 
   useEffect(() => { loadSaved(); }, []);
   return(  <SavedContext.Provider value={{ savedUrls, toggleSave,loadSaved }}>

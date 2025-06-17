@@ -194,6 +194,7 @@ def fetch_medium_articles(tags=None, limit=10):
                 summarizer = LsaSummarizer()
                 summary_sentences = summarizer(parser.document, 3)
                 summary = " ".join(str(sentence) for sentence in summary_sentences)
+               
             
 
             except Exception as e:
@@ -204,7 +205,8 @@ def fetch_medium_articles(tags=None, limit=10):
 
             if not Article.objects.filter(url=entry.link).exists():
                 Article.objects.create(
-                    title=entry.title,
+                    
+                    title = entry.title.strip()[:200] if entry.title else 'No Title',
                     url=entry.link,
                     source='Medium',
                     language=tag,
@@ -249,7 +251,7 @@ def fetch_github_repo():
 def purge():
     Article.objects.all().delete()
     Repo.objects.all().delete()
-    getAll()
+   
     
 
 
