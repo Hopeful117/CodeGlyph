@@ -1,7 +1,7 @@
 
-# 📰 DevPulse
+# 📰 CodeGlyph
 
-DevPulse is a full-stack web application (Django + React) designed to centralize and browse the latest news about programming languages from multiple sources (Dev.to, Reddit, Hacker News...).
+CodeGlyph is a full-stack web application (Django + React) designed to centralize and browse the latest news about programming languages from multiple sources (Dev.to, Reddit, Hacker News...).
 ---
 ## 🌐 Features
 
