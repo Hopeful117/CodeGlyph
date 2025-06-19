@@ -159,6 +159,9 @@ text-align: center;
     }
   main{
     flex-direction: column;
+    .articles{
+      max-width: 100%;
+    }
   }
   
   }
