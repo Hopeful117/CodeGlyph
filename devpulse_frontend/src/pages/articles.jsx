@@ -15,8 +15,8 @@ import Repo from '../components/repos';
 
 const ArticleList = () => {
   const [articles, setArticles] = useState([]);
-  const [nextPage, setNextPage] = useState(null);
-  const [prevPage, setPrevPage] = useState(null);
+  const [nextPage, setNextPage] = useState(1);
+  const [prevPage, setPrevPage] = useState(1);
   const [sources,setSources]=useState([]);
   const [tags,setTags]=useState([]);
   const [selectedSource,setSelectedSource]= useState(null);
