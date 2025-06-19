@@ -39,7 +39,7 @@ const ArticleList = () => {
       res = await fetchArticles(page);
     }
 
-    setArticles(res.data.result);
+    setArticles(res.data.results);
     setNextPage(res.data.next);
     setPrevPage(res.data.previous);
     }
@@ -64,7 +64,7 @@ const ArticleList = () => {
   const loadRepo=async()=>{
  
     const res=await fetchRepos()
-    SetRepos(res.data.result)
+    SetRepos(res.data.results)
   }
 
 
