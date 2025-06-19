@@ -1,7 +1,7 @@
 export default function About(){
 
      return (
-    <main style={{ padding: '2rem', maxWidth: '800px', margin: 'auto' }}>
+    <main style={{ padding: '2rem', maxWidth: '800px', margin: 'auto',flexDirection:'column' }}>
       <h1>About CodeGlyph</h1>
 
       <p>
