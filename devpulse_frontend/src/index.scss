@@ -36,8 +36,8 @@ background-color:#121212;
         flex-direction: row;
         align-items:flex-start;
         justify-content:space-between;
-        width:100%;
         max-width: 1280px;
+        
         gap:100px;
         
       .articles{
@@ -45,6 +45,7 @@ background-color:#121212;
         flex-direction:column;
         align-items: flex-start;
         justify-content: center;
+        max-width: 50%;
       }
         .filter-buttons {
             display: flex;
