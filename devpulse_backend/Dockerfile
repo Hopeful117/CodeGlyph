@@ -19,5 +19,6 @@ COPY . .
 EXPOSE 8000
 
 # Commande de lancement
-CMD ["gunicorn", "devpulse_backend.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD command: gunicorn -c gunicorn.conf.py devpulse_backend.wsgi:application
+
 
