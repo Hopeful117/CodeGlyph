@@ -39,7 +39,7 @@ const ArticleList = () => {
       res = await fetchArticles(page);
     }
 
-    setArticles(res.data);
+    setArticles(res.data.result);
     setNextPage(res.data.next);
     setPrevPage(res.data.previous);
     }
@@ -64,7 +64,7 @@ const ArticleList = () => {
   const loadRepo=async()=>{
  
     const res=await fetchRepos()
-    SetRepos(res.data)
+    SetRepos(res.data.result)
   }
 
 
@@ -97,7 +97,6 @@ const ArticleList = () => {
      
       <h3 className="ibm-plex-sans-title">Sources</h3>
        <div className="filter-buttons">
-        
       <button className ={`filter-button ${selectedSource === null ? 'active' : ''}`} onClick={() => {setSelectedSource(null);setSelectedTag(null);
       }}>All</button>
       {sources.map((source,index)=>(
