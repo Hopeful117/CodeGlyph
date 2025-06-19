@@ -40,7 +40,12 @@ background-color:#121212;
         max-width: 1280px;
         gap:100px;
         
-
+      .articles{
+        display:flex;
+        flex-direction:column;
+        align-items: flex-start;
+        justify-content: center;
+      }
         .filter-buttons {
             display: flex;
             justify-content: center;

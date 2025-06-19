@@ -95,17 +95,20 @@ const ArticleList = () => {
       <div className="articles">
       <h1 className="ibm-plex-sans-title">Articles</h1>
      
-      <h3 className="ibm-plex-sans-title">Sources</h3>
+      
        <div className="filter-buttons">
-      <button className ={`filter-button ${selectedSource === null ? 'active' : ''}`} onClick={() => {setSelectedSource(null);setSelectedTag(null);
-      }}>All</button>
-      {sources.map((source,index)=>(
+          <h3 className="ibm-plex-sans-title">Sources</h3>
+        
+          <button className ={`filter-button ${selectedSource === null ? 'active' : ''}`} onClick={() => {setSelectedSource(null);setSelectedTag(null);
+          }}>All</button>
+          {sources.map((source,index)=>(
           
-        <button className={`filter-button ${selectedSource === source ? 'active' : ''}`} key={index} onClick={()=> {setSelectedSource(source);setSelectedTag(null)}}>{source}</button>
-      ))}
-      </div>
-      <h3 className="ibm-plex-sans-title">Tags</h3>
+          <button className={`filter-button ${selectedSource === source ? 'active' : ''}`} key={index} onClick={()=> {setSelectedSource(source);setSelectedTag(null)}}>{source}</button>
+           ))}
+        </div>
+     
       <div className="filter-buttons">
+         <h3 className="ibm-plex-sans-title">Tags</h3>
        <button className ={`filter-button ${selectedTag === null ? 'active' : ''}`}  onClick={() => {setSelectedSource(null);setSelectedTag(null)}}>All</button>
       
       {tags.map((tag,index)=>(
@@ -114,11 +117,11 @@ const ArticleList = () => {
       </div>
 
       {articles && articles.map((article) => (
-        <div key={article.id} className="gallery">
+      <div key={article.id} className="gallery">
         <Article url={article.url} title={article.title}source={article.source}language={article.language} date={article.published_at} description={article.summary}/> 
         
         
-        </div>
+      </div>
       ))}
 
       <div className="pagination">
