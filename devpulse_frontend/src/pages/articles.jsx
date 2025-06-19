@@ -122,8 +122,8 @@ const ArticleList = () => {
       ))}
 
       <div className="pagination">
-        {prevPage && <button className="filter-button" onClick={() => loadArticles(new URL(prevPage).searchParams.get('page'))||'1'}>Previous</button>}
-        {nextPage && <button className="filter-button" onClick={() => loadArticles(new URL(nextPage).searchParams.get('page'))}>Next</button>}
+        {prevPage && <button className="filter-button" onClick={() => loadArticles(new URL(prevPage).searchParams.get('page')||'1')}>Previous</button>}
+        {nextPage && <button className="filter-button" onClick={() => loadArticles(new URL(nextPage).searchParams.get('page')||'1')}>Next</button>}
       </div>
     </div>
     <div className="repo">
