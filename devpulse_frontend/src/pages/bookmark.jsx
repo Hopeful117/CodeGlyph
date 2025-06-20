@@ -1,9 +1,14 @@
 import { fetchBookmark } from "../api/articles"
 import Article from "../components/article";
 import { useState,useEffect } from "react";
+import { useSavedArticle } from "../context/bookmarkContext";
+
 export default function Bookmark(){
     const [articles, setArticles] = useState([]);
-    const getbookMark = async() =>{
+    const { savedUrls, loadSaved } = useSavedArticle();
+
+    useEffect(()=>{
+        const getbookMark = async() =>{
         let res;
         try {
             res=await fetchBookmark()
@@ -14,9 +19,13 @@ export default function Bookmark(){
     }
     
     }
-    useEffect(()=>{
-        getbookMark()
-    },[])
+    getbookMark()
+
+
+
+    },[savedUrls])
+   
+   
     return(
         <main>
          {articles.map((article) => (
