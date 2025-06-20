@@ -16,17 +16,14 @@ const LoginPage = () => {
  const handleLogin = async (e) => {
   e.preventDefault();
   try {
-    loginUser(username,password)
+    await loginUser(username,password)
 
     
     login()
+  
     navigate('/');
   } catch (error) {
-    if (error.response) {
-      setError("Nom d'utilisateur ou mot de passe invalide.");
-    } else {
-      setError("Erreur réseau ou serveur injoignable.");
-    }
+   setError(error.message || "Erreur inconnue lors de la connexion.");
   }
 };
   return (
