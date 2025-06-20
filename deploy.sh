@@ -2,7 +2,7 @@
 
 set -e
 
-DEPLOY_DIR="${DEPLOY_DIR:-/var/www}"  # Remplace si besoin
+DEPLOY_DIR="${DEPLOY_DIR:-/var/www/CodeGlyph}"  # Remplace si besoin
 
 # Nettoie le dossier cible sans supprimer Docker volumes ou config
 rm -rf "$DEPLOY_DIR/tmp_deploy"
