@@ -9,7 +9,7 @@ const SavedContext = createContext();
 
 export const SavedProvider = ({children})=>{
     const [savedUrls,setSavedUrls]=useState([]);
-    const {isLoggedIn} = useAuth
+    const {isLoggedIn} = useAuth()
     
     const loadSaved= async ()=>{
         if (isLoggedIn){
