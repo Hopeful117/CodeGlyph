@@ -13,23 +13,24 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Copy files to VPS via SSH
+    - name: Copy deploy script to VPS
       uses: appleboy/scp-action@v0.1.4
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
-        source: "."
+        source: "deploy.sh"
         target: ${{ secrets.DEPLOY_DIR }}
-        
 
-    - name: Run deploy commands on VPS
+    - name: Run deploy script on VPS
       uses: appleboy/ssh-action@v1.0.0
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         script: |
+          chmod +x ${{ secrets.DEPLOY_DIR }}/deploy.sh
           cd ${{ secrets.DEPLOY_DIR }}
+          ./deploy.sh
           docker compose pull
           docker compose up -d --build
