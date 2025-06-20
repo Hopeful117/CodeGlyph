@@ -30,6 +30,7 @@ background-color:#121212;
     .register-page,.login-page{
         flex-direction: column;
     }
+ 
     main{
         color:white;
         display:flex;
@@ -124,7 +125,13 @@ background-color:#121212;
 text-align: center;
 }
 
+.error{
 
+  flex-direction: column !important;
+  h1{
+    font-size: 200px;
+  }
+}
 
 
 @media (max-width: 768px) {

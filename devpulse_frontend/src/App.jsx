@@ -5,6 +5,7 @@ import About from './pages/about';
 import Register from './pages/register';
 import Login from './pages/login';
 import Bookmark from './pages/bookmark';
+import Error404 from './pages/404'
 
 
 
@@ -23,6 +24,7 @@ function App() {
         <Route path='/register' element={<Register/>}/>
         <Route path="/login" element={<Login />} />
         <Route path='/bookmark' element={<Bookmark/>}/>
+        <Route path="*" element={<Error404 />} />
       </Routes>
     </Router>
     </>
