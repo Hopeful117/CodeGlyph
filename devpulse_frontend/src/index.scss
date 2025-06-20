@@ -127,7 +127,9 @@ text-align: center;
 
 .error{
 
-  flex-direction: column !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   h1{
     font-size: 200px;
   }
@@ -202,6 +204,13 @@ text-align: center;
     font-size: 1.5rem;
     text-align: center;
   }
+  .error{
+
+  
+  h1{
+    font-size: 50px;
+  }
+}
 
   
 }
