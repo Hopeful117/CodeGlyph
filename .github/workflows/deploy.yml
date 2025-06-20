@@ -21,10 +21,10 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         source: "."
         target: ${{ secrets.DEPLOY_DIR }}
-        overwrite: true
-        strip_components: 0
-        tar_tmp_path: /tmp
+        strip_components: 1
+        tar_exec: "tar --exclude='**/__pycache__' --exclude='**/*.pyc'"
 
+      
     - name: Run deploy commands on VPS
       uses: appleboy/ssh-action@v1.0.0
       with:
