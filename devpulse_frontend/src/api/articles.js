@@ -60,8 +60,7 @@ export const saveArticle = async(url)=>{
 export const deleteArticle=async(url)=>{
   try {
     await API.delete('/savearticle/',{
-      "url":url,},
-      {
+    data:{url},  
     headers: { 'Content-Type': 'application/json',
     Authorization: `Bearer ${localStorage.getItem('access')}`,
 
