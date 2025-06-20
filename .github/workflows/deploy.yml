@@ -31,5 +31,6 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         script: |
           cd ${{ secrets.DEPLOY_DIR }}
+          find . -type d -name '__pycache__' -exec rm -rf {} +
           docker compose pull
           docker compose up -d --build
