@@ -3,7 +3,6 @@ import { fetchArticles } from '../api/articles';
 import { fetchArticlesBySource } from '../api/articles';
 import { fetchSources } from '../api/articles';
 import { fetchArticlesByTag } from '../api/articles';
-import { fetchArticlesBySourceAndTag } from '../api/articles';
 import { fetchTag } from '../api/articles';
 import { fetchRepos } from '../api/articles';
 import Article from '../components/article';
@@ -29,21 +28,16 @@ const ArticleList = () => {
   const loadArticles = async (page = 1) => {
     try {
        let res;
-    if (selectedSource && selectedTag==null) {
+    if (selectedSource) {
     
       res = await fetchArticlesBySource(selectedSource, page);
-    } 
-    if (selectedTag && selectedSource==null){
+    } else if (selectedTag){
     
       
         res = await fetchArticlesByTag(selectedTag, page);
       
-    } 
-    if (selectedTag==null && selectedSource==null){
+    } else {
       res = await fetchArticles(page);
-    }
-    if(selectedTag != null && selectedSource !=null){
-      res = await fetchArticlesBySourceAndTag(selectedSource,selectedTag,page)
     }
 
     setArticles(res.data.results);
@@ -90,9 +84,7 @@ const ArticleList = () => {
    useEffect(() => {
     loadArticles();
   }, [selectedSource,selectedTag]);
-  
-  
-  
+
 const watchSources=(e)=>{
   if (e.target.value !=""){
     setSelectedSource(e.target.value)
@@ -110,10 +102,7 @@ const watchSources=(e)=>{
     setSelectedTag(null)
   }
   }
-
-
-
-
+  
 
 
 
@@ -124,30 +113,12 @@ const watchSources=(e)=>{
       <h1 className="ibm-plex-sans-title">Articles</h1>
      
       <h3 className="ibm-plex-sans-title">Sources</h3>
-<<<<<<< HEAD
-       <div className="filter-buttons">
-      <button className ={`filter-button ${selectedSource === null ? 'active' : ''}`} onClick={() => {setSelectedSource(null);
-      }}>All Sources</button>
-      {sources && sources.map((source,index)=>(
-          
-        <button className={`filter-button ${selectedSource === source ? 'active' : ''}`} key={index} onClick={()=> {setSelectedSource(source)}}>{source}</button>
-      ))}
-      </div>
-      <h3 className="ibm-plex-sans-title">Tags</h3>
-      <div className="filter-buttons">
-       <button className ={`filter-button ${selectedTag === null ? 'active' : ''}`}  onClick={() => {setSelectedTag(null)}}>All Tags</button>
-      
-      {tags.map((tag,index)=>(
-        <button className={`filter-button ${selectedTag === tag ? 'active' : ''}`} key={index} onClick={()=> {setSelectedTag(tag)}}>{tag}</button>
-      ))}
-      </div>
-=======
-      <Selector options={sources} value={selectedSource}  onChange={watchSources}></Selector>
+       <Selector options={sources} value={selectedSource}  onChange={watchSources}></Selector>
      
       <h3 className="ibm-plex-sans-title">Tags</h3>
       <Selector options={tags} value={selectedTag}  onChange={watchTags}></Selector>
      
->>>>>>> bfd83226 (replace filter button by options select)
+    
 
       {articles && articles.map((article) => (
         <div key={article.id} className="gallery">
