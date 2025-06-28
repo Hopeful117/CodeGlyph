@@ -6,19 +6,24 @@ background-color:#121212;
     display:flex;
     align-items: center;
     justify-content: space-between;
+    background-color: #1C1C1E;
+    border-radius: 10px;
+    
     h1{
         color:$primary-color;
         font-size: 64px;
+        margin-left: 10px;
     }
     nav{
         display:flex;
        
         gap:30px;
+        margin-right: 10px;
         a,.logout-btn{
             text-decoration: none;
             color:$primary-color;
             font-size:32px;
-            background-color:#121212;
+            background-color:#1C1C1E;
             border:none;
 
         }
@@ -48,36 +53,14 @@ background-color:#121212;
         justify-content: center;
         max-width: 50%;
       }
-        .filter-buttons {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            }
+      select {
+          padding: 8px;
+          border-radius: 4px;
+          margin-left: 10px;
+          width:100%;
+}
 
-        .filter-button {
-            padding: 0.5rem 1rem;
-            font-family: 'IBM Plex Sans', sans-serif;
-            font-size: 0.875rem;
-            border: 1px solid #ccc;
-            border-radius: 9999px;
-            background-color: #f5f5f5;
-            color: #333;
-            cursor: pointer;
-            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-            }
-
-            .filter-button:hover {
-            background-color: #e0e0e0;
-            border-color: #999;
-            }
-
-            .filter-button.active {
-            background-color: #222;
-            color: #fff;
-            border-color: #111;
-            }
+      
      
         .gallery{
             display:flex;
@@ -90,6 +73,7 @@ background-color:#121212;
               .article{
                width:100%;
                 background-color:#1C1C1E;
+                border-radius: 10px;
                 a{
                     
                     color:$primary-color;
@@ -142,6 +126,10 @@ text-align: center;
     font-size: 16px;
   .header{
     flex-direction: column;
+    margin-bottom: 30px;
+     h1{
+    font-size: 30px;
+  }
     nav{
         font-size: 16px;
         flex-direction: column;
@@ -184,15 +172,7 @@ text-align: center;
   }
   
 
-  .filter-buttons {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .filter-button {
-    width: 100%;
-    font-size: 1rem;
-  }
+ 
 
   .gallery {
     display: block;
@@ -207,9 +187,7 @@ text-align: center;
   .error{
 
   
-  h1{
-    font-size: 50px;
-  }
+ 
 }
 
   
