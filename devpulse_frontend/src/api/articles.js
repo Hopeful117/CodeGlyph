@@ -16,6 +16,9 @@ export const fetchArticlesByTag = (tag, page = 1) =>
 export const fetchArticlesBySource = (source, page = 1) =>
   API.get(`/articles/source/${source}/?page=${page}`);
 
+export const fetchArticlesBySourceAndTag=(source,tag,page=1)=>
+  API.get(`articles/search/${source}/${tag}/?page=${page}`)
+
 export const fetchSources = ()=>
   API.get('/sources')
 
