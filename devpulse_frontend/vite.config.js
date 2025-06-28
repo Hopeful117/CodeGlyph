@@ -8,10 +8,11 @@ plugins: [react()],
     host: '0.0.0.0',
     port: 3000,
     strictPort: true,
-    hmr: {
+    /*hmr: {
       protocol: 'wss',
       host: 'codeglyph.eu',
       port: 443,
     }
+      */
   }
 })

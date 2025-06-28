@@ -99,7 +99,7 @@ const ArticleList = () => {
        <div className="filter-buttons">
       <button className ={`filter-button ${selectedSource === null ? 'active' : ''}`} onClick={() => {setSelectedSource(null);setSelectedTag(null);
       }}>All</button>
-      {sources.map((source,index)=>(
+      {sources && sources.map((source,index)=>(
           
         <button className={`filter-button ${selectedSource === source ? 'active' : ''}`} key={index} onClick={()=> {setSelectedSource(source);setSelectedTag(null)}}>{source}</button>
       ))}

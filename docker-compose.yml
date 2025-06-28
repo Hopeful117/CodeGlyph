@@ -10,7 +10,7 @@ services:
   web:
     build:
       context: ./devpulse_backend     # chemin vers le Dockerfile backend
-    command: gunicorn devpulse_backend.wsgi:application --bind 0.0.0.0:8000 --workers 4 --timeout 120 --log-level debug
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./devpulse_backend:/app
       - ./static:/app/static    # monte le code backend

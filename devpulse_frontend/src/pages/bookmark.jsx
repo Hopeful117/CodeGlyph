@@ -5,7 +5,7 @@ import { useSavedArticle } from "../context/bookmarkContext";
 
 export default function Bookmark(){
     const [articles, setArticles] = useState([]);
-    const { savedUrls, loadSaved } = useSavedArticle();
+    const { savedUrls} = useSavedArticle();
 
     useEffect(()=>{
         const getbookMark = async() =>{

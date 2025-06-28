@@ -5,6 +5,8 @@ from pathlib import Path
 from celery.schedules import crontab
 from datetime import timedelta
 
+load_dotenv()  
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
@@ -88,7 +90,7 @@ CELERY_BEAT_SCHEDULE = {
 
 # Static & media files
 STATIC_URL = "/static/"
-STATIC_ROOT = "/app/static"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
@@ -139,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#CSRF_COOKIE_SECURE = True
+#SESSION_COOKIE_SECURE = True
+#SECURE_SSL_REDIRECT = True
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
