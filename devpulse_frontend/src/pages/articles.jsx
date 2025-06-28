@@ -8,6 +8,7 @@ import { fetchTag } from '../api/articles';
 import { fetchRepos } from '../api/articles';
 import Article from '../components/article';
 import Repo from '../components/repos';
+import Selector from '../components/selector';
 
 
  
@@ -89,6 +90,27 @@ const ArticleList = () => {
    useEffect(() => {
     loadArticles();
   }, [selectedSource,selectedTag]);
+  
+  
+  
+const watchSources=(e)=>{
+  if (e.target.value !=""){
+    setSelectedSource(e.target.value)
+  }
+  else{
+    setSelectedSource(null)
+  }
+  }
+
+  const watchTags=(e)=>{
+  if (e.target.value !=""){
+    setSelectedTag(e.target.value)
+  }
+  else{
+    setSelectedTag(null)
+  }
+  }
+
 
 
 
@@ -102,6 +124,7 @@ const ArticleList = () => {
       <h1 className="ibm-plex-sans-title">Articles</h1>
      
       <h3 className="ibm-plex-sans-title">Sources</h3>
+<<<<<<< HEAD
        <div className="filter-buttons">
       <button className ={`filter-button ${selectedSource === null ? 'active' : ''}`} onClick={() => {setSelectedSource(null);
       }}>All Sources</button>
@@ -118,6 +141,13 @@ const ArticleList = () => {
         <button className={`filter-button ${selectedTag === tag ? 'active' : ''}`} key={index} onClick={()=> {setSelectedTag(tag)}}>{tag}</button>
       ))}
       </div>
+=======
+      <Selector options={sources} value={selectedSource}  onChange={watchSources}></Selector>
+     
+      <h3 className="ibm-plex-sans-title">Tags</h3>
+      <Selector options={tags} value={selectedTag}  onChange={watchTags}></Selector>
+     
+>>>>>>> bfd83226 (replace filter button by options select)
 
       {articles && articles.map((article) => (
         <div key={article.id} className="gallery">
