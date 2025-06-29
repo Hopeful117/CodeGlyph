@@ -45,7 +45,7 @@ const LoginPage = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" className="filter-button">Login</button>
+        <button type="submit" className=".button-white">Login</button>
       </form>
     </main>
   );

@@ -27,18 +27,14 @@ class Repo(models.Model):
 
 class SavedArticle(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="saved_articles")
-    article = models.ForeignKey("Article", on_delete=models.SET_NULL, null=True)
-    saved_at = models.DateTimeField(auto_now_add=True)
+    title = models.CharField(max_length=500)
+    url = models.URLField(max_length=1000)
+    source = models.CharField(max_length=100)
+    language = models.CharField(max_length=50)
+    published_at = models.DateTimeField()
+    summary = models.TextField(blank=True)
 
     class Meta:
-        unique_together = ('user', 'article')
+        unique_together = ('user', 'url')
 
-    def __str__(self):
-
-        try:
-
-            return f"{self.user.username} -> {self.article.title}"
-
-        except AttributeError:
-
-            return f"{self.user.username} -> No Article"
+   
