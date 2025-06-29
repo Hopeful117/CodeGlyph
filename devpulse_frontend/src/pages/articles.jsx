@@ -3,6 +3,7 @@ import { fetchArticles } from '../api/articles';
 import { fetchArticlesBySource } from '../api/articles';
 import { fetchSources } from '../api/articles';
 import { fetchArticlesByTag } from '../api/articles';
+import { fetchArticlesBySourceAndTag } from '../api/articles';
 import { fetchTag } from '../api/articles';
 import { fetchRepos } from '../api/articles';
 import Article from '../components/article';
@@ -28,16 +29,21 @@ const ArticleList = () => {
   const loadArticles = async (page = 1) => {
     try {
        let res;
-    if (selectedSource) {
+    if (selectedSource && selectedTag==null) {
     
       res = await fetchArticlesBySource(selectedSource, page);
-    } else if (selectedTag){
+    } 
+    if (selectedTag && selectedSource==null){
     
       
         res = await fetchArticlesByTag(selectedTag, page);
       
-    } else {
+    } 
+    if (selectedTag==null && selectedSource==null){
       res = await fetchArticles(page);
+    }
+    if(selectedTag != null && selectedSource !=null){
+      res = await fetchArticlesBySourceAndTag(selectedSource,selectedTag,page)
     }
 
     setArticles(res.data.results);
@@ -84,7 +90,9 @@ const ArticleList = () => {
    useEffect(() => {
     loadArticles();
   }, [selectedSource,selectedTag]);
-
+  
+  
+  
 const watchSources=(e)=>{
   if (e.target.value !=""){
     setSelectedSource(e.target.value)
@@ -102,7 +110,10 @@ const watchSources=(e)=>{
     setSelectedTag(null)
   }
   }
-  
+
+
+
+
 
 
 
@@ -113,12 +124,11 @@ const watchSources=(e)=>{
       <h1 className="ibm-plex-sans-title">Articles</h1>
      
       <h3 className="ibm-plex-sans-title">Sources</h3>
-       <Selector options={sources} value={selectedSource}  onChange={watchSources}></Selector>
+      <Selector options={sources} value={selectedSource}  onChange={watchSources}></Selector>
      
       <h3 className="ibm-plex-sans-title">Tags</h3>
       <Selector options={tags} value={selectedTag}  onChange={watchTags}></Selector>
      
-    
 
       {articles && articles.map((article) => (
         <div key={article.id} className="gallery">
