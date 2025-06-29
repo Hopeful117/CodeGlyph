@@ -10,7 +10,7 @@ from rest_framework.decorators import action
 from .utils import defaultList
 from django.contrib.auth.models import User
 import datetime
-from django.db import IntegrityError
+from django.db.utils import IntegrityError
 
 class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Article.objects.all().order_by('-published_at')
@@ -104,7 +104,7 @@ class SaveArticle(APIView):
 
        
         try:
-            saved_article=SavedArticle.objects.create(user=user, article=article)
+            saved_article=SavedArticle.objects.create(user=user,title=article.title,url=article.url,source=article.source,language=article.language,published_at=article.published_at,summary=article.summary)
         except IntegrityError:
             return Response({"error": "Article déjà sauvegardé."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -117,12 +117,10 @@ class SaveArticle(APIView):
         url = request.data.get('url')
 
         try:
-            article = Article.objects.get(url=url)
-            saved = SavedArticle.objects.get(user=user, article=article)
-            saved.delete()
+            article = SavedArticle.objects.get(user=user,url=url)
+            article.delete()
             return Response({"message": "Article supprimé."}, status=status.HTTP_204_NO_CONTENT)
-        except Article.DoesNotExist:
-            return Response({"error": "Article non trouvé."}, status=status.HTTP_404_NOT_FOUND)
+        
         except SavedArticle.DoesNotExist:
             return Response({"error": "Article non sauvegardé."}, status=status.HTTP_400_BAD_REQUEST)
 

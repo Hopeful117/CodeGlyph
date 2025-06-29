@@ -17,7 +17,7 @@ admin.site.register(Repo,RepoAdmin)
 
 
 class SavedArticleAdmin(admin.ModelAdmin):
-    list_display=('user','article','saved_at')
+    list_display=('user','title')
     search_fields=['user']
 
 admin.site.register(SavedArticle,SavedArticleAdmin)
