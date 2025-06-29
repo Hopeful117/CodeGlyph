@@ -149,8 +149,9 @@ def fetch_hackernews_articles(keywords=None):
             print(f"Erreur pour {story_url}: {e}")
 
         for keyword in keywords:
-                url = story['url']
+                
                 try:
+                    url = story['url']
                     article=NewsArticle(url)
                     article.download()
                     article.parse()
