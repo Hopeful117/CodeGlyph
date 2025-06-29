@@ -27,7 +27,7 @@ export default function Bookmark(){
    
    
     return(
-        <main>
+        <main className="bookmark">
          {articles.map((article) => (
                <div key={article.id} className="gallery">
                       <Article url={article.url} title={article.title}source={article.source}language={article.language} date={article.published_at} description={article.summary}/> 
