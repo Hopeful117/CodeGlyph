@@ -1,1 +1,47 @@
 .env
+.scpi
+
+
+# Fichiers Python compilés
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+# Environnement virtuel
+venv/
+env/
+
+# Fichiers de config ou secrets locaux
+*.env
+*.sqlite3
+db.sqlite3
+
+# Static et media générés
+/staticfiles/
+/static/
+/media/
+
+# Django cache/migrations
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.mo
+
+# Migrations auto
+*/migrations/*.py
+!*/migrations/__init__.py
+
+# Node (si frontend React/Vite inclus)
+node_modules/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store

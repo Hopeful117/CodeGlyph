@@ -1,4 +1,4 @@
-.env
+ .env
 .scpi
 
 
@@ -6,7 +6,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+*.pyc
 # Environnement virtuel
 venv/
 env/

@@ -95,6 +95,14 @@ background-color:#121212;
    
        
     }
+    .bookmark{
+        display:flex;
+        flex-direction:column;
+        align-items: flex-start;
+        justify-content: center;
+        max-width: 100%;
+
+    }
    
 
 }
