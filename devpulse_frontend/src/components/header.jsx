@@ -27,8 +27,8 @@ export default function Header(){
           </>
         ) :
             <>
-            <NavLink to ={'/register'}>Register</NavLink>
-            <NavLink to={'/login'}>Login</NavLink>
+           
+            <NavLink to={'/login'}>Magic Login</NavLink>
             </>
     }
             

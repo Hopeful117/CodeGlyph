@@ -11,6 +11,11 @@ from .utils import defaultList
 from django.contrib.auth.models import User
 import datetime
 from django.db.utils import IntegrityError
+from django.utils import timezone
+from django.core.mail import send_mail
+
+from datetime import timedelta
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Article.objects.all().order_by('-published_at')
@@ -127,13 +132,7 @@ class SaveArticle(APIView):
 
 
 
-class RegisterView(APIView):
-    def post(self, request):
-        username = request.data.get("username")
-        password = request.data.get("password")
-        if User.objects.filter(username=username).exists():
-            return Response({"error": "Username taken"}, status=status.HTTP_400_BAD_REQUEST)
-        User.objects.create_user(username=username, password=password)
-        return Response({"message": "Account created"}, status=status.HTTP_201_CREATED)
-    
-    
+
+
+
+

@@ -1,6 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ArticleViewSet,TagListView,SourceListView,RepoViewSet,SavedArticleViewSet,RegisterView,SaveArticle
+from .views import ArticleViewSet,TagListView,SourceListView,RepoViewSet,SavedArticleViewSet,SaveArticle
+
 
 
 router = DefaultRouter()
@@ -13,8 +14,9 @@ urlpatterns = [
     path('', include(router.urls)),
     path('tags/', TagListView.as_view(), name='tag-list'),
     path('sources/',SourceListView.as_view(),name='source-list'),
-    path('register/', RegisterView.as_view(), name='register'),
-    path('savearticle/',SaveArticle.as_view(),name='savearticle')
+    path('savearticle/',SaveArticle.as_view(),name='savearticle'),
+   
+]
    
 
-]
+

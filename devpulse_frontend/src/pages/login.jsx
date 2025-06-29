@@ -1,53 +1,40 @@
 
-import React, {useState } from 'react';
-import { useAuth } from '../context/authcontext';
-import { useNavigate } from 'react-router-dom';
-
-import { loginUser } from '../api/auth';
-
+import {useState } from 'react';
+import { MagicLoginRequest} from '../api/auth';
 
 const LoginPage = () => {
-  const {login}=useAuth()
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+const [email, setEmail] = useState("");
+const [message, setMessage] = useState("");
 
+
+  
  const handleLogin = async (e) => {
   e.preventDefault();
   try {
-    await loginUser(username,password)
-
-    
-    login()
-  
-    navigate('/');
-  } catch (error) {
-   setError(error.message || "Erreur inconnue lors de la connexion.");
+    await MagicLoginRequest(email)
+    setMessage("A link was set to your email");
+} catch (error) {
+   setMessage(error.message || "Error while sending link, please verify your email");
   }
 };
   return (
-    <main className="login-page">
-      <h1 className="ibm-plex-sans-title">Login</h1>
-      <form onSubmit={handleLogin} className="form-container">
-        {error && <p className="error">{error}</p>}
+    <div className="max-w-md mx-auto mt-10">
+      <h2 className="text-xl font-semibold mb-4">Magic Login</h2>
+      <form onSubmit={handleLogin} className="space-y-4">
         <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          type="email"
+          placeholder="Your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
+          className="w-full p-2 border rounded"
         />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit" className=".button-white">Login</button>
+        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded">
+         Send Link
+        </button>
       </form>
-    </main>
+      {message && <p className="mt-4 text-sm text-gray-600">{message}</p>}
+    </div>
   );
 };
 

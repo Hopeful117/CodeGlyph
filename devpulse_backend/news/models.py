@@ -1,8 +1,8 @@
 from django.db import models
 from django.conf import settings
-
+import uuid
 from django.contrib.auth.models import AbstractUser
-
+from django.utils import timezone
 
 class Article(models.Model):
     title = models.CharField(max_length=500)
@@ -37,4 +37,3 @@ class SavedArticle(models.Model):
     class Meta:
         unique_together = ('user', 'url')
 
-   
