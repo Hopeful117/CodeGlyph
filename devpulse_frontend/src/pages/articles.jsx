@@ -29,18 +29,28 @@ const ArticleList = () => {
   const loadArticles = async (page = 1) => {
     try {
        let res;
+      loadTags()
+      loadSources()
     if (selectedSource && selectedTag==null) {
     
       res = await fetchArticlesBySource(selectedSource, page);
+      const existingTag=res.data.results.map(article=>article.language)
+      const cleanTag=[...new Set(existingTag)]
+      setTags(cleanTag)
     } 
     if (selectedTag && selectedSource==null){
+       res = await fetchArticlesByTag(selectedTag, page);
+      const existingSource=res.data.results.map(article=>article.source)
+      const cleanSource=[...new Set(existingSource)]
+      setSources(cleanSource)
     
       
-        res = await fetchArticlesByTag(selectedTag, page);
+       
       
     } 
     if (selectedTag==null && selectedSource==null){
       res = await fetchArticles(page);
+      
     }
     if(selectedTag != null && selectedSource !=null){
       res = await fetchArticlesBySourceAndTag(selectedSource,selectedTag,page)

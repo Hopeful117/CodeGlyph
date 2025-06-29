@@ -58,7 +58,8 @@ class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
 
 class TagListView(APIView):
     def get(self,request):
-        return Response({"tags":defaultList})
+        tags= Article.objects.values_list('language', flat=True).distinct()
+        return Response({"tags":list(tags)})
     
 class SourceListView(APIView):
     def get(self,request):
