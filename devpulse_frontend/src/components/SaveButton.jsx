@@ -12,7 +12,7 @@ const isSaved = savedUrls.includes(url);
 
 
     return(
-        <button className='filter-button' onClick={()=>toggleSave(url)}>{isSaved ?'forget':'save'}</button>
+        <button className='button-white' onClick={()=>toggleSave(url)}>{isSaved ?'forget':'save'}</button>
     )
 
 }
