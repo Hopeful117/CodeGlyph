@@ -150,6 +150,7 @@ def fetch_hackernews_articles(keywords=None, limit=10):
 
 
 
+<<<<<<< HEAD
         for keyword in keywords:
                 url = story['url']
                 try:
@@ -157,32 +158,46 @@ def fetch_hackernews_articles(keywords=None, limit=10):
                     article.download()
                     article.parse()
                     full_text = article.text
+=======
+        
+                
+        try:
+            url = story['url']
+            article=NewsArticle(url)
+            article.download()
+            article.parse()
+            full_text = article.text
+            for keyword in keywords:
+                if  keyword.lower() in story['title'].lower():
+                    language=keyword 
+>>>>>>> 49d15ced (major fix to fetch hackernews function)
 
-                    parser = PlaintextParser.from_string(full_text, Tokenizer("english"))
-                    summarizer = LsaSummarizer()
-                    summary_sentences = summarizer(parser.document, 3)  
-                    summary = " ".join(str(sentence) for sentence in summary_sentences)
 
-                except Exception as e:
+            parser = PlaintextParser.from_string(full_text, Tokenizer("english"))
+            summarizer = LsaSummarizer()
+            summary_sentences = summarizer(parser.document, 3)  
+            summary = " ".join(str(sentence) for sentence in summary_sentences)
+
+        
+    
+            if not Article.objects.filter(url=story['url']).exists():
+                Article.objects.create(
+                    title=story['title'],
+                    url=story['url'],
+                    source='HackerNews',
+                    language=language,
+                    published_at=make_aware(datetime.fromtimestamp(story['time'])),
+                    summary=summary
+                    
+            )
+        except Exception as e:
                     print(f"Erreur pour {url}: {e}")
 
 
-          
-                if not Article.objects.filter(url=story['url']).exists():
-                    Article.objects.create(
-                        title=story['title'],
-                        url=story['url'],
-                        source='HackerNews',
-                        language=keyword,
-                        published_at=make_aware(datetime.fromtimestamp(story['time'])),
-                        summary=summary
-                        
-                    )
                   
         
 def fetch_medium_articles(tags=None, limit=10):
-    import nltk
-    nltk.download('punkt_tab')
+   
    
     if tags is None:
         tags = defaultList
