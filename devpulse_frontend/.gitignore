@@ -1,24 +1,48 @@
-# Logs
-logs
+.env
+.scpi
+
+
+# Fichiers Python compilés
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+# Environnement virtuel
+venv/
+env/
+
+# Fichiers de config ou secrets locaux
+*.env
+*.sqlite3
+db.sqlite3
+
+# Static et media générés
+/staticfiles/
+/static/
+/media/
+
+# Django cache/migrations
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.mo
 
-node_modules
-dist
-dist-ssr
-*.local
+# Migrations auto
+*/migrations/*.py
+!*/migrations/__init__.py
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Node (si frontend React/Vite inclus)
+node_modules/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+
