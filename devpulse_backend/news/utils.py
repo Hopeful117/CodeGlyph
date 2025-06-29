@@ -148,18 +148,10 @@ def fetch_hackernews_articles(keywords=None, limit=10):
         except Exception as e:
             print(f"Erreur pour {story_url}: {e}")
 
-<<<<<<< HEAD
-        for keyword in keywords:
-                url = story['url']
-                try:
-                    article=NewsArticle(url)
-                    article.download()
-                    article.parse()
-                    full_text = article.text
-=======
+
         
                 
-        try:
+         try:
             url = story['url']
             article=NewsArticle(url)
             article.download()
@@ -168,7 +160,7 @@ def fetch_hackernews_articles(keywords=None, limit=10):
             for keyword in keywords:
                 if  keyword.lower() in story['title'].lower():
                     language=keyword 
->>>>>>> 49d15ced (major fix to fetch hackernews function)
+
 
 
             parser = PlaintextParser.from_string(full_text, Tokenizer("english"))
