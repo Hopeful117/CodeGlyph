@@ -135,11 +135,11 @@ def fetch_reddit_posts(subreddit_name=None, limit=10):
 
 
 
-def fetch_hackernews_articles(keywords=None, limit=10):
+def fetch_hackernews_articles(keywords=None):
     if keywords is None:
         keywords=defaultList
     top_stories_url = 'https://hacker-news.firebaseio.com/v0/topstories.json'
-    story_ids = requests.get(top_stories_url).json()[:limit]
+    story_ids = requests.get(top_stories_url).json()
 
     for story_id in story_ids:
         try:
