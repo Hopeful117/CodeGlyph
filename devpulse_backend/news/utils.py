@@ -142,8 +142,11 @@ def fetch_hackernews_articles(keywords=None, limit=10):
     story_ids = requests.get(top_stories_url).json()[:limit]
 
     for story_id in story_ids:
-        story_url = f'https://hacker-news.firebaseio.com/v0/item/{story_id}.json'
-        story = requests.get(story_url).json()
+        try:
+         story_url = f'https://hacker-news.firebaseio.com/v0/item/{story_id}.json'
+         story = requests.get(story_url).json()
+        except Exception as e:
+            print(f"Erreur pour {story_url}: {e}")
 
         for keyword in keywords:
                 url = story['url']
